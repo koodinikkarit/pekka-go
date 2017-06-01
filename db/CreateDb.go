@@ -3,6 +3,7 @@ package pekka
 import (
 	"fmt"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 )
 
@@ -15,7 +16,7 @@ func CreateDb(
 ) *gorm.DB {
 	db, err := gorm.Open("mysql", dbUser+":"+dbPass+"@tcp("+dbIp+":"+dbPort+")/"+dbName)
 	if err != nil {
-		fmt.Println("Creating database connection failed")
+		fmt.Println("Creating database connection failed", dbUser+":"+dbPass+"@tcp("+dbIp+":"+dbPort+")/"+dbName)
 	}
 
 	db.AutoMigrate(&Button{})

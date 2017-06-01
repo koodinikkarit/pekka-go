@@ -10,9 +10,9 @@ import (
 )
 
 type PekkaServer struct {
-	db            *gorm.DB
-	server        *grpc.Server
-	pekkaEndpoint *PekkaEndpoint
+	db             *gorm.DB
+	server         *grpc.Server
+	penttiEndpoint *PenttiEndpoint
 }
 
 func (p *PekkaServer) Start() {
@@ -29,12 +29,12 @@ func CreatePekkaServer(
 	pekkaPort string,
 ) *PekkaServer {
 	db := pekka.CreateDb(dbUser, dbPass, dbIp, dbPort, dbName)
-	pekkaEndpoint := CreatePekkaEndpoint(pekkaPort, db)
+	go CreatePenttiEndpoint(pekkaPort, db)
 	server := CreateService(db, servicePort)
 
 	return &PekkaServer{
-		db:            db,
-		server:        server,
-		pekkaEndpoint: pekkaEndpoint,
+		db:     db,
+		server: server,
+		//penttiEndpoint: penttiEndpoint,
 	}
 }

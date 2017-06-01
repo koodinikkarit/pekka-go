@@ -11,6 +11,10 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/grpclog"
 	"google.golang.org/grpc/reflection"
+
+	"fmt"
+
+	"github.com/koodinikkarit/pekka/db"
 )
 
 type server struct {
@@ -29,7 +33,79 @@ func (s *server) FetchWeeklyTimerBySlug(ctx context.Context, in *PekkaService.Fe
 	return &PekkaService.FetchWeeklyTimerBySlugResponse{}, nil
 }
 
+func (s *server) CreateWeeklyTimer(ctx context.Context, in *PekkaService.CreateWeeklyTimerRequest) (*PekkaService.CreateWeeklyTimerResponse, error) {
+	return &PekkaService.CreateWeeklyTimerResponse{}, nil
+}
+
+func (s *server) EditWeeklyTimer(ctx context.Context, in *PekkaService.EditWeeklyTimerRequest) (*PekkaService.EditWeeklyTimerResponse, error) {
+	return &PekkaService.EditWeeklyTimerResponse{}, nil
+}
+
+func (s *server) FetchExecutors(fetchExecutors *PekkaService.FetchExecutorsRequest, stream PekkaService.Pekka_FetchExecutorsServer) error {
+	return nil
+}
+
+func (s *server) FetchExecutorById(ctx context.Context, in *PekkaService.FetchExecutorByIdRequest) (*PekkaService.FetchExecutorByIdResponse, error) {
+	return &PekkaService.FetchExecutorByIdResponse{}, nil
+}
+
+func (s *server) FetchExecutorActionsByExecutorId(in *PekkaService.FetchExecutorActionsByExecutorIdRequest, stream PekkaService.Pekka_FetchExecutorActionsByExecutorIdServer) error {
+	return nil
+}
+
+func (s *server) CreateExecutor(ctx context.Context, in *PekkaService.CreateExecutorRequest) (*PekkaService.CreateExecutorResponse, error) {
+	return &PekkaService.CreateExecutorResponse{}, nil
+}
+
+func (s *server) AddExecutorActionToExecutor(ctx context.Context, in *PekkaService.AddExecutorActionToExecutorRequest) (*PekkaService.AddExecutorActionToExecutorResponse, error) {
+	return &PekkaService.AddExecutorActionToExecutorResponse{}, nil
+}
+
+func (s *server) EditButton(ctx context.Context, in *PekkaService.EditButtonRequest) (*PekkaService.EditButtonResponse, error) {
+	return &PekkaService.EditButtonResponse{}, nil
+}
+
+func (s *server) FetchPenttiDevices(in *PekkaService.FetchPenttiDevicesRequest, stream PekkaService.Pekka_FetchPenttiDevicesServer) error {
+	penttiDevices := []pekka.Pentti{}
+	s.db.Find(&penttiDevices)
+
+	for _, pentti := range penttiDevices {
+		stream.Send(&PekkaService.Pentti{
+			Id: pentti.ID,
+			Ip: pentti.Ip,
+		})
+	}
+
+	return nil
+}
+
+func (s *server) FetchPenttiById(ctx context.Context, in *PekkaService.FetchPenttiByIdRequest) (*PekkaService.FetchPenttiByIdResponse, error) {
+	var pentti pekka.Pentti
+	s.db.First(&pentti, in.PenttiId)
+	return &PekkaService.FetchPenttiByIdResponse{
+		Pentti: &PekkaService.Pentti{
+			Id: pentti.ID,
+			Ip: pentti.Ip,
+		},
+	}, nil
+}
+
+func (s *server) FetchButtonsByPenttiId(in *PekkaService.FetchButtonsByPenttiIdRequest, stream PekkaService.Pekka_FetchButtonsByPenttiIdServer) error {
+	buttons := []pekka.Button{}
+	s.db.Find(&buttons)
+
+	for _, button := range buttons {
+		stream.Send(&PekkaService.Button{
+			Id:       button.ID,
+			PenttiId: button.PenttiID,
+			Number:   uint32(button.ButtonNumber),
+		})
+	}
+	return nil
+}
+
 func CreateService(db *gorm.DB, port string) *grpc.Server {
+	fmt.Println("create grpc")
 	lis, err := net.Listen("tcp", ":"+port)
 	if err != nil {
 		grpclog.Fatalf("failed to listen: %v", err)

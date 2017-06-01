@@ -1,8 +1,7 @@
 package pekka
 
-
 type Button struct {
-	ID 		 uint32
-	penttiID uint32
-
+	ID           uint32
+	PenttiID     uint32
+	ButtonNumber int
 }
