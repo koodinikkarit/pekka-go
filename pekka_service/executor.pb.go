@@ -14,13 +14,14 @@ var _ = fmt.Errorf
 var _ = math.Inf
 
 type Executor struct {
-	Id uint32 `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`
+	Id   uint32 `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`
+	Name string `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
 }
 
 func (m *Executor) Reset()                    { *m = Executor{} }
 func (m *Executor) String() string            { return proto.CompactTextString(m) }
 func (*Executor) ProtoMessage()               {}
-func (*Executor) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0} }
+func (*Executor) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0} }
 
 func (m *Executor) GetId() uint32 {
 	if m != nil {
@@ -29,18 +30,149 @@ func (m *Executor) GetId() uint32 {
 	return 0
 }
 
-func init() {
-	proto.RegisterType((*Executor)(nil), "PekkaService.Executor")
+func (m *Executor) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
 }
 
-func init() { proto.RegisterFile("executor.proto", fileDescriptor2) }
+type FetchExecutorsRequest struct {
+	Offset uint32 `protobuf:"varint,1,opt,name=offset" json:"offset,omitempty"`
+	Limit  uint32 `protobuf:"varint,2,opt,name=limit" json:"limit,omitempty"`
+}
 
-var fileDescriptor2 = []byte{
-	// 82 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x4b, 0xad, 0x48, 0x4d,
-	0x2e, 0x2d, 0xc9, 0x2f, 0xd2, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x09, 0x48, 0xcd, 0xce,
-	0x4e, 0x0c, 0x4e, 0x2d, 0x2a, 0xcb, 0x4c, 0x4e, 0x55, 0x92, 0xe2, 0xe2, 0x70, 0x85, 0xca, 0x0b,
-	0xf1, 0x71, 0x31, 0x65, 0xa6, 0x48, 0x30, 0x2a, 0x30, 0x6a, 0xf0, 0x06, 0x31, 0x65, 0xa6, 0x24,
-	0xb1, 0x81, 0x35, 0x18, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0xa5, 0xbf, 0x09, 0xce, 0x42, 0x00,
-	0x00, 0x00,
+func (m *FetchExecutorsRequest) Reset()                    { *m = FetchExecutorsRequest{} }
+func (m *FetchExecutorsRequest) String() string            { return proto.CompactTextString(m) }
+func (*FetchExecutorsRequest) ProtoMessage()               {}
+func (*FetchExecutorsRequest) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{1} }
+
+func (m *FetchExecutorsRequest) GetOffset() uint32 {
+	if m != nil {
+		return m.Offset
+	}
+	return 0
+}
+
+func (m *FetchExecutorsRequest) GetLimit() uint32 {
+	if m != nil {
+		return m.Limit
+	}
+	return 0
+}
+
+type FetchExecutorByIdRequest struct {
+	ExecutorId uint32 `protobuf:"varint,1,opt,name=executorId" json:"executorId,omitempty"`
+}
+
+func (m *FetchExecutorByIdRequest) Reset()                    { *m = FetchExecutorByIdRequest{} }
+func (m *FetchExecutorByIdRequest) String() string            { return proto.CompactTextString(m) }
+func (*FetchExecutorByIdRequest) ProtoMessage()               {}
+func (*FetchExecutorByIdRequest) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{2} }
+
+func (m *FetchExecutorByIdRequest) GetExecutorId() uint32 {
+	if m != nil {
+		return m.ExecutorId
+	}
+	return 0
+}
+
+type FetchExecutorByIdResponse struct {
+	Executor *Executor `protobuf:"bytes,1,opt,name=executor" json:"executor,omitempty"`
+}
+
+func (m *FetchExecutorByIdResponse) Reset()                    { *m = FetchExecutorByIdResponse{} }
+func (m *FetchExecutorByIdResponse) String() string            { return proto.CompactTextString(m) }
+func (*FetchExecutorByIdResponse) ProtoMessage()               {}
+func (*FetchExecutorByIdResponse) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{3} }
+
+func (m *FetchExecutorByIdResponse) GetExecutor() *Executor {
+	if m != nil {
+		return m.Executor
+	}
+	return nil
+}
+
+type FetchExecutorActionsByExecutorIdRequest struct {
+	ExecutorId uint32 `protobuf:"varint,1,opt,name=executorId" json:"executorId,omitempty"`
+}
+
+func (m *FetchExecutorActionsByExecutorIdRequest) Reset() {
+	*m = FetchExecutorActionsByExecutorIdRequest{}
+}
+func (m *FetchExecutorActionsByExecutorIdRequest) String() string { return proto.CompactTextString(m) }
+func (*FetchExecutorActionsByExecutorIdRequest) ProtoMessage()    {}
+func (*FetchExecutorActionsByExecutorIdRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor3, []int{4}
+}
+
+func (m *FetchExecutorActionsByExecutorIdRequest) GetExecutorId() uint32 {
+	if m != nil {
+		return m.ExecutorId
+	}
+	return 0
+}
+
+type CreateExecutorRequest struct {
+	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+}
+
+func (m *CreateExecutorRequest) Reset()                    { *m = CreateExecutorRequest{} }
+func (m *CreateExecutorRequest) String() string            { return proto.CompactTextString(m) }
+func (*CreateExecutorRequest) ProtoMessage()               {}
+func (*CreateExecutorRequest) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{5} }
+
+func (m *CreateExecutorRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+type CreateExecutorResponse struct {
+	Executor *Executor `protobuf:"bytes,1,opt,name=executor" json:"executor,omitempty"`
+}
+
+func (m *CreateExecutorResponse) Reset()                    { *m = CreateExecutorResponse{} }
+func (m *CreateExecutorResponse) String() string            { return proto.CompactTextString(m) }
+func (*CreateExecutorResponse) ProtoMessage()               {}
+func (*CreateExecutorResponse) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{6} }
+
+func (m *CreateExecutorResponse) GetExecutor() *Executor {
+	if m != nil {
+		return m.Executor
+	}
+	return nil
+}
+
+func init() {
+	proto.RegisterType((*Executor)(nil), "PekkaService.Executor")
+	proto.RegisterType((*FetchExecutorsRequest)(nil), "PekkaService.FetchExecutorsRequest")
+	proto.RegisterType((*FetchExecutorByIdRequest)(nil), "PekkaService.FetchExecutorByIdRequest")
+	proto.RegisterType((*FetchExecutorByIdResponse)(nil), "PekkaService.FetchExecutorByIdResponse")
+	proto.RegisterType((*FetchExecutorActionsByExecutorIdRequest)(nil), "PekkaService.FetchExecutorActionsByExecutorIdRequest")
+	proto.RegisterType((*CreateExecutorRequest)(nil), "PekkaService.CreateExecutorRequest")
+	proto.RegisterType((*CreateExecutorResponse)(nil), "PekkaService.CreateExecutorResponse")
+}
+
+func init() { proto.RegisterFile("executor.proto", fileDescriptor3) }
+
+var fileDescriptor3 = []byte{
+	// 250 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x91, 0x41, 0x4b, 0x03, 0x31,
+	0x10, 0x85, 0xc9, 0xa2, 0xa5, 0x8e, 0xb6, 0x87, 0x60, 0x97, 0xf5, 0x22, 0x25, 0x17, 0x0b, 0x42,
+	0x0e, 0xf5, 0xe6, 0xcd, 0xca, 0x0a, 0x0b, 0x82, 0x12, 0x7f, 0xc1, 0x9a, 0x9d, 0x62, 0xa8, 0xdd,
+	0xd4, 0x64, 0x2a, 0xf6, 0xdf, 0x0b, 0x31, 0x59, 0xb6, 0xe2, 0x41, 0x7a, 0xcb, 0x24, 0xef, 0x7d,
+	0xf3, 0x66, 0x02, 0x63, 0xfc, 0x42, 0xbd, 0x25, 0xeb, 0xe4, 0xc6, 0x59, 0xb2, 0xfc, 0xec, 0x19,
+	0x57, 0xab, 0xfa, 0x05, 0xdd, 0xa7, 0xd1, 0x28, 0x24, 0x0c, 0xcb, 0xf8, 0xce, 0xc7, 0x90, 0x99,
+	0xa6, 0x60, 0x53, 0x36, 0x1b, 0xa9, 0xcc, 0x34, 0x9c, 0xc3, 0x51, 0x5b, 0xaf, 0xb1, 0xc8, 0xa6,
+	0x6c, 0x76, 0xa2, 0xc2, 0x59, 0x94, 0x30, 0x79, 0x40, 0xd2, 0x6f, 0xc9, 0xe4, 0x15, 0x7e, 0x6c,
+	0xd1, 0x13, 0xcf, 0x61, 0x60, 0x97, 0x4b, 0x8f, 0x14, 0x01, 0xb1, 0xe2, 0xe7, 0x70, 0xfc, 0x6e,
+	0xd6, 0x86, 0x02, 0x65, 0xa4, 0x7e, 0x0a, 0x71, 0x0b, 0xc5, 0x1e, 0x66, 0xb1, 0xab, 0x9a, 0x44,
+	0xba, 0x04, 0x48, 0x91, 0xab, 0x14, 0xa7, 0x77, 0x23, 0x9e, 0xe0, 0xe2, 0x0f, 0xaf, 0xdf, 0xd8,
+	0xd6, 0x23, 0x9f, 0xc3, 0x30, 0x49, 0x83, 0xf5, 0x74, 0x9e, 0xcb, 0xfe, 0xc0, 0x32, 0xb9, 0x54,
+	0xa7, 0x13, 0x15, 0x5c, 0xed, 0x01, 0xef, 0x34, 0x19, 0xdb, 0xfa, 0xc5, 0xae, 0xec, 0x9a, 0xfe,
+	0x37, 0xdb, 0x35, 0x4c, 0xee, 0x1d, 0xd6, 0x84, 0x5d, 0x9b, 0x68, 0x4c, 0xbb, 0x64, 0xbd, 0x5d,
+	0x3e, 0x42, 0xfe, 0x5b, 0x7c, 0xf8, 0x14, 0xaf, 0x83, 0xf0, 0xbd, 0x37, 0xdf, 0x01, 0x00, 0x00,
+	0xff, 0xff, 0x1e, 0xa7, 0x02, 0x85, 0xf0, 0x01, 0x00, 0x00,
 }
